@@ -9,6 +9,7 @@ import UIKit
 
 class ViewController: UIViewController {
     
+    @IBOutlet weak var signature: UILabel!
     @IBOutlet weak var myButton: UIButton! //button for changing background
     
     @IBOutlet weak var SETTINGS_BUTTON: UIButton! // button for settings
@@ -27,6 +28,7 @@ class ViewController: UIViewController {
         myButton.translatesAutoresizingMaskIntoConstraints = false
         SETTINGS_BUTTON.translatesAutoresizingMaskIntoConstraints = false
         settingslabel.translatesAutoresizingMaskIntoConstraints = false
+        signature.translatesAutoresizingMaskIntoConstraints = false
         //animationSwitch.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -51,6 +53,15 @@ class ViewController: UIViewController {
             SETTINGS_BUTTON.widthAnchor.constraint(equalToConstant: 200)
                                     ])
 
+        NSLayoutConstraint.activate([
+          // center horizontally
+          signature.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+          // **only** pin its top to the button's bottom + 40pt
+          signature.topAnchor.constraint(
+            equalTo: myButton.bottomAnchor,
+            constant: 575   // ← adjust this number up/down to move it lower/higher
+          )
+        ])
         NSLayoutConstraint.activate([
           // center horizontally
           settingslabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -138,6 +149,14 @@ class ViewController: UIViewController {
                 let randomColor     = UIColor(red: red,    green: green, blue: blue,    alpha: 1.0)
                 let complementColor = UIColor(red: 1.0-red, green: 1.0-green, blue: 1.0-blue, alpha: 1.0)
                 
+        let offset: CGFloat = 0.05  // 5% lighter
+
+        let signatureColor = UIColor(
+          red:   min(red   + offset, 1.0),
+          green: min(green + offset, 1.0),
+          blue:  min(blue  + offset, 1.0),
+          alpha: 1.0
+        )
                 // animate them together
         if animationSwitch.isOn {
             
@@ -150,12 +169,16 @@ class ViewController: UIViewController {
                 self.SETTINGS_BUTTON.setTitleColor(randomColor, for: .normal)
                 self.settingslabel.textColor = complementColor
                 self.settingslabel.backgroundColor = randomColor
+                self.signature.textColor = signatureColor
             }
         } else {
             view.backgroundColor     = randomColor
             myButton.backgroundColor = complementColor
             settingslabel.textColor = complementColor
             settingslabel.backgroundColor = randomColor
+            signature.textColor = signatureColor
+            SETTINGS_BUTTON.backgroundColor = complementColor
+            
         }
             }
     //! REMEMBER, SET THE BUTTON TYPE TO CUSTOM, OTHER ATTRIBUTES WILL BE OVERWRITTEN
